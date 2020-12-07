@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   django:
-    image: ${IMAGE_ROOT}/django:${GITHUB_SHA_SHORT}
+    image: ${IMAGE_ROOT}/makeuoft2021_django:${GITHUB_SHA_SHORT}
     command: gunicorn hackathon_site.wsgi:application --bind 0.0.0.0:8002 --workers 5 --capture-output --access-logfile - --error-logfile -
     ports:
       - 8002:8002
