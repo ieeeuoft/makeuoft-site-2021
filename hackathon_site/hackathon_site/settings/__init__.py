@@ -260,10 +260,10 @@ LOGGING = {
 HACKATHON_NAME = "MakeUofT"
 CONTACT_EMAIL = DEFAULT_FROM_EMAIL
 
-REGISTRATION_OPEN_DATE = datetime(2021, 1, 7, tzinfo=TZ_INFO)
-REGISTRATION_CLOSE_DATE = datetime(2021, 2, 7, tzinfo=TZ_INFO)
-EVENT_START_DATE = datetime(2021, 2, 7, 10, 0, 0, tzinfo=TZ_INFO)
-EVENT_END_DATE = datetime(2021, 2, 14, 17, 0, 0, tzinfo=TZ_INFO)
+REGISTRATION_OPEN_DATE = datetime(2021, 1, 6, tzinfo=TZ_INFO)
+REGISTRATION_CLOSE_DATE = datetime(2021, 2, 6, tzinfo=TZ_INFO)
+EVENT_START_DATE = datetime(2021, 2, 6, 10, 0, 0, tzinfo=TZ_INFO)
+EVENT_END_DATE = datetime(2021, 2, 21, 23, 59, 59, tzinfo=TZ_INFO)
 
 # Registration settings
 ACCOUNT_ACTIVATION_DAYS = 7
