@@ -1,6 +1,8 @@
-# IEEE Hackathon Website Template
+# IEEE MakeUofT 2021
 
-A website template for hackathons run by [IEEE University of Toronto Student Branch](https://ieee.utoronto.ca/).
+http://ieee.utoronto.ca/makeuoft
+
+Created using IEEE UofT's [hackathon template](https://github.com/ieeeuoft/hackathon-template).
 
 ## Contents
 - [Requirements](#requirements)
