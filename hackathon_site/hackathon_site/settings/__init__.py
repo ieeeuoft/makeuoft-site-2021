@@ -41,12 +41,20 @@ if DEBUG:
         r"^https?://localhost:?\d*$",
     ]
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
     # NOTE: If you aren't ieee uoft, put your websites here
     ALLOWED_HOSTS = ["ieee.utoronto.ca"]
     CORS_ORIGIN_REGEX_WHITELIST = [
         r"^https://ieee\.utoronto.ca:?\d*$",
     ]
+
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
+    EMAIL_PORT = os.environ.get("EMAIL_PORT", None)
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", None)
+    EMAIL_USE_SSL = True
+    DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_FROM_ADDRESS", "webmaster@localhost")
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -250,13 +258,12 @@ LOGGING = {
 
 # Event specific settings
 HACKATHON_NAME = "CoolHacks"
-DEFAULT_FROM_EMAIL = "webmaster@localhost"
 CONTACT_EMAIL = DEFAULT_FROM_EMAIL
 
-REGISTRATION_OPEN_DATE = datetime(2020, 9, 1, tzinfo=TZ_INFO)
-REGISTRATION_CLOSE_DATE = datetime(2020, 9, 30, tzinfo=TZ_INFO)
-EVENT_START_DATE = datetime(2020, 10, 10, 10, 0, 0, tzinfo=TZ_INFO)
-EVENT_END_DATE = datetime(2020, 10, 11, 17, 0, 0, tzinfo=TZ_INFO)
+REGISTRATION_OPEN_DATE = datetime(2021, 1, 7, tzinfo=TZ_INFO)
+REGISTRATION_CLOSE_DATE = datetime(2021, 2, 7, tzinfo=TZ_INFO)
+EVENT_START_DATE = datetime(2021, 2, 7, 10, 0, 0, tzinfo=TZ_INFO)
+EVENT_END_DATE = datetime(2021, 2, 14, 17, 0, 0, tzinfo=TZ_INFO)
 
 # Registration settings
 ACCOUNT_ACTIVATION_DAYS = 7

@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  django:
+    image: ${IMAGE_ROOT}/django:${GITHUB_SHA_SHORT}
+    command: gunicorn hackathon_site.wsgi:application --bind 0.0.0.0:8002 --workers 5 --capture-output --access-logfile - --error-logfile -
+    ports:
+      - 8002:8002
+    env_file: .env
+    volumes:
+      - /var/www/${GITHUB_REPOSITORY}/media/:/var/www/media/
+    deploy:
+      replicas: 1
+      update_config:
+        failure_action: rollback
+        order: start-first
+      restart_policy:
+        condition: on-failure
+    networks:
+      - makeuoft-2021
+  redis:
+    image: redis:6-alpine
+    ports:
+      - 6379:6379
+    deploy:
+      replicas: 1
+      update_config:
+        failure_action: rollback
+        order: start-first
+      restart_policy:
+        condition: on-failure
+    networks:
+      - makeuoft-2021
+
+networks:
+  makeuoft-2021:
+    driver: overlay
