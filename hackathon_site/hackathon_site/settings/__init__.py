@@ -257,7 +257,7 @@ LOGGING = {
 }
 
 # Event specific settings
-HACKATHON_NAME = "CoolHacks"
+HACKATHON_NAME = "MakeUofT"
 CONTACT_EMAIL = DEFAULT_FROM_EMAIL
 
 REGISTRATION_OPEN_DATE = datetime(2021, 1, 7, tzinfo=TZ_INFO)
