@@ -11,14 +11,22 @@
         <!-- Compiled and minified CSS for Materialize -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
 
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700,900|Source+Sans+Pro:400,400i,600,700,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700&amp;display=swap" rel="stylesheet">
+        
         <title>{% block title %}Hackathon Site{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{{ static('event/styles/css/styles.css') }}" />
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ static('event/images/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ static('event/images/favicon/favicon-16x16.png') }}">
         {% block head_extends %}{% endblock %}
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar primaryColor" role="navigation">
+        <nav class="navbar {% block nav_background_color %}scrolled{% endblock %}" role="navigation">
             <div class="nav-wrapper container">
                 <a href="{{ url("event:index") }}"><img src="{{ static('event/images/logo.svg') }}" class="logoNav" alt="logo" /></a>
 

@@ -4,6 +4,28 @@ $(document).scroll(function () {
     $nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 });
 
+
+// Background color changing
+$(window).scroll(function() {
+    let $window = $(window),
+        $wrapper = $('.wrapper'),
+        $colorScrollPanel = $('.colorScroll'),
+        fontColors = ["#333", "#FFF", "#FFF", "#333", "#333"];
+    
+    // Change 40% earlier than scroll position so colour is there when you arrive.
+    let scroll = $window.scrollTop() + ($window.height() * .4);
+    if ($window.scrollTop() < 300) {$wrapper.css('background-color', "#fff");}
+    $colorScrollPanel.each(function (i) {
+        let $this = $(this);
+        
+        if ($this.position().top <= scroll && $this.position().top + $this.height() > scroll) {
+            $wrapper.css('background-color', $(this).attr('data-background-color'));
+            $colorScrollPanel.css('color', fontColors[i]);
+        }
+    });    
+  }).scroll();
+
+
 $(document).ready(function () {
     // Materialize stuff
     $(".carousel").carousel({ dist: 0, padding: 600 });
