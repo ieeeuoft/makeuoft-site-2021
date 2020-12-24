@@ -20,8 +20,6 @@ services:
       - makeuoft-2021
   redis:
     image: redis:6-alpine
-    ports:
-      - 6379:6379
     deploy:
       replicas: 1
       update_config:
