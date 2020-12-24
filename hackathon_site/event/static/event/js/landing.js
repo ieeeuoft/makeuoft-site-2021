@@ -39,7 +39,7 @@ $(document).ready(function () {
     }, 3000);
 
     $(".scrollspy").scrollSpy();
-    $(".collapsible").collapsible();
+    $(".collapsible").collapsible({accordion: false});
 
     // Countdown stuff
 

@@ -249,18 +249,25 @@ nav ul a {
 .schedule {
     margin: 10px 0 30px;
 
+    h5 {
+        font-family: font(header);
+        font-weight: 500;
+    }
+
     p {
         font-size: 20px;
         margin: 0;
     }
 
     &Time {
-        width: 80px;
+        margin-right: 20px !important;
+        font-weight: bold;
     }
 
     &Row {
         display: flex;
-        margin: 10px 0;
+        margin: 10px 0 25px;
+        justify-content: center;
     }
 
     @include responsive(md-down) {
@@ -315,7 +322,6 @@ nav ul a {
 }
 .collapsible-header {
     background-color: transparent;
-    // color: #fff;
 }
 
 // .collapsible-body {
