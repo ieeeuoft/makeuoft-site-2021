@@ -324,16 +324,30 @@ nav ul a {
     background-color: transparent;
 }
 
-// .collapsible-body {
-//     color: color(light);
-// }
-
 // End of "FAQ" section
 
 // Video section
 .video {
     max-width: 1000px;
     width: 90%;
+    height: 557px;
+
+    // iframe heights are static so I have to set the height every time
+    @include responsive(lg-down) {
+        height: 400px;
+    }
+
+    @include responsive(md-down) {
+        height: 360px;
+    }
+
+    @include responsive(sm-down) {
+        height: 250px;
+    }
+
+    @include responsive(xs-down) {
+        height: 200px;
+    }
 }
 // End of video section
 

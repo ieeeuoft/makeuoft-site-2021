@@ -14,7 +14,8 @@
     <li><a href="#about">About</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#sponsors">Sponsors</a></li>
+    <!-- I'll uncomment once Marketing gets me the new graphic -->
+    <!-- <li><a href="#sponsors">Sponsors</a></li> -->
     <li><a href="#contact">Contact</a></li>
     {% if request.user.is_authenticated %}
         <li><a href="{{ url("event:dashboard") }}">Dashboard</a></li>                     
@@ -309,16 +310,10 @@
     </div>
     <br /><br /><br />
 
-    <div class="container colorScroll" data-background-color="#EFCF5D">
-        <div class="section">
-            <div class="s12 m8 flexColCenter">
-                <h3 class="center">Check out last year!</h3>
-    
-                <video class="video center" controls>
-                    <source src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+    <div class="container section colorScroll" data-background-color="#EFCF5D">
+        <div class="s12 m8 flexColCenter">
+            <h3 class="center white-text">Check out last year!</h3>
+            <iframe class="video center" src="https://www.youtube.com/embed/Vfi3pRkoyOI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <br /><br />
     </div>
@@ -326,26 +321,27 @@
 
     <div class="carousel">
         <!-- IMAGES MUST ALL BE THE SAME SIZE -->
-        <a class="carousel-item" ><img src="https://i.imgur.com/u9JEte7.jpg" alt="2019-image-1"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/Y95LgjJ.jpg" alt="2019-image-2"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/gkTya6z.jpg" alt="2019-image-3"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/sV9kcJ0.jpg" alt="2019-image-4"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/OphvNr1.jpg" alt="2019-image-5"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/2l2xp7E.jpg" alt="2019-image-6"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/jzCFrUA.jpg" alt="2019-image-7"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/cchUGUe.jpg" alt="2019-image-8"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/TbeTufj.jpg" alt="2019-image-9"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/B4vfSWL.jpg" alt="2019-image-10"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/iBbFyns.jpg" alt="2019-image-11"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/pv6NmC4.jpg" alt="2019-image-12"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/HjNbGhK.jpg" alt="2019-image-13"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/U33ZyB2.jpg" alt="2019-image-14"/></a>
-        <a class="carousel-item" ><img src="https://i.imgur.com/Ig49uvq.jpg" alt="2019-image-15"/></a>å
+        <a class="carousel-item" ><img src="https://i.imgur.com/u9JEte7.jpg" alt="2020-image-1"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/Y95LgjJ.jpg" alt="2020-image-2"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/gkTya6z.jpg" alt="2020-image-3"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/sV9kcJ0.jpg" alt="2020-image-4"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/OphvNr1.jpg" alt="2020-image-5"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/2l2xp7E.jpg" alt="2020-image-6"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/jzCFrUA.jpg" alt="2020-image-7"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/cchUGUe.jpg" alt="2020-image-8"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/TbeTufj.jpg" alt="2020-image-9"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/B4vfSWL.jpg" alt="2020-image-10"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/iBbFyns.jpg" alt="2020-image-11"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/pv6NmC4.jpg" alt="2020-image-12"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/HjNbGhK.jpg" alt="2020-image-13"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/U33ZyB2.jpg" alt="2020-image-14"/></a>
+        <a class="carousel-item" ><img src="https://i.imgur.com/Ig49uvq.jpg" alt="2020-image-15"/></a>å
     </div>
 </div>
 <br /><br />
 
-<div class="container">
+<!-- I'll uncomment once Marketing gets me the new graphic -->
+<!-- <div class="container">
     <div class="section scrollspy" id="sponsors">
         <div class="row">
             <h3 class="center">Sponsors</h3>
@@ -359,7 +355,7 @@
             </p>
         </div>
     </div>
-</div>
+</div> -->
 
 <footer class="page-footer secondaryColor fontText">
     <div class="container scrollspy" id="contact">
