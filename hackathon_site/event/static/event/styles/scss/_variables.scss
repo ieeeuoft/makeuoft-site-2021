@@ -5,6 +5,12 @@ $colors: (
     secondary: #f0ab3a,
     light: #f6b94a,
     dark: #333,
+    error: #b00020,
+    success: #0b890b,
+    primaryOnHover: #08529c,
+    secondaryOnHover: #d2a300,
+    errorOnHover: #870000,
+    successOnHover: #1d7521,
 );
 
 $fonts: (
@@ -13,7 +19,7 @@ $fonts: (
 );
 
 $font-sizes: (
-    xl: 45px,
+    xl: 20px,
     lg: 18px,
     md: 16px,
     sm: 14px,

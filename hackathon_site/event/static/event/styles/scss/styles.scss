@@ -27,7 +27,7 @@ h3 {
 }
 
 body {
-    font-size: 18px;
+    font-size: size(lg);
     color: color(font);
     font-family: font(body);
 }
@@ -51,6 +51,98 @@ strong {
     min-height: 100vh;
 }
 // End of background color change
+
+// Colors
+.primaryColor {
+    background-color: color(primary) !important;
+}
+
+.secondaryColor {
+    background-color: color(secondary) !important;
+}
+
+.primaryText {
+    color: color(primary) !important;
+}
+
+.secondaryText {
+    color: color(secondary) !important;
+}
+
+.fontText {
+    color: color(font) !important;
+}
+
+.errorText {
+    color: color(error) !important;
+}
+
+.successText {
+    color: color(success) !important;
+}
+
+.colorBtn {
+    font-weight: bold !important;
+    text-align: center;
+    text-transform: uppercase;
+    color: color(font) !important;
+    background-color: color(secondary) !important;
+
+    &:hover {
+        background-color: color(secondaryOnHover) !important;
+    }
+}
+
+.redBtn {
+    font-weight: bold !important;
+    text-align: center;
+    text-transform: uppercase;
+    color: color(white) !important;
+    background-color: color(error) !important;
+
+    &:hover {
+        background-color: color(errorOnHover) !important;
+    }
+}
+
+.active {
+    color: color(secondary);
+}
+// End of colors
+
+// Formatting stuff
+.flexColCenter {
+    @include flexPosition($alIte: center, $dir: column);
+}
+
+.longText {
+    padding-right: 200px;
+
+    @include responsive(sm-down) {
+        padding-right: 0;
+    }
+}
+
+.hoverLink {
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.rowMarginPadding {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+}
+
+.formPadding {
+    @include responsive(sm-down) {
+        padding: 0 !important;
+    }
+}
+// End of formatting stuff
 
 // Navbar stuff
 .logoNav {
@@ -163,7 +255,7 @@ nav ul a {
             font-size: 22px;
         }
         h5 {
-            font-size: 18px;
+            font-size: size(lg);
         }
     }
 }
@@ -178,6 +270,7 @@ nav ul a {
         border-radius: 100px 14px 100px 100px;
         padding: 2px 17px 2px 12px;
         font-size: 18px;
+        font-size: size(lg);
         font-style: italic;
         color: color(font);
         font-weight: 700;
@@ -256,7 +349,7 @@ nav ul a {
     }
 
     p {
-        font-size: 20px;
+        font-size: size(xl);
         margin: 0;
     }
 
@@ -274,7 +367,7 @@ nav ul a {
 
     @include responsive(md-down) {
         p {
-            font-size: 18px;
+            font-size: size(lg);
         }
         &Time {
             width: 70px;
@@ -394,61 +487,11 @@ nav ul a {
 }
 // End of section
 
-// Colors
-.primaryColor {
-    background-color: color(primary) !important;
-}
-
-.secondaryColor {
-    background-color: color(secondary) !important;
-}
-
-.primaryText {
-    color: color(primary) !important;
-}
-
-.secondaryText {
-    color: color(secondary) !important;
-}
-
-.fontText {
-    color: color(font) !important;
-}
-
-.colorBtn {
-    font-weight: bold !important;
-    text-align: center;
-    text-transform: uppercase;
-    color: color(font) !important;
-    background-color: color(secondary) !important;
-
-    &:hover {
-        background-color: #d2a300 !important;
-    }
-}
-
-.redBtn {
-    font-weight: bold !important;
-    text-align: center;
-    text-transform: uppercase;
-    color: #f3c7c7 !important;
-    background-color: #b40000 !important;
-
-    &:hover {
-        background-color: #870000 !important;
-    }
-}
-
-.active {
-    color: color(secondary);
-}
-// End of colors
-
 // Login stuff
 .login {
     &Div {
         display: flex;
-        background-color: #fff;
+        background-color: color(white);
         border-top: solid 10px color(secondary);
         border-radius: 3px 3px 0 0;
         padding: 50px 30px 30px;
@@ -472,7 +515,7 @@ nav ul a {
     &Link {
         @include flexPosition($jusCon: center);
         margin: 10px 0 15px;
-        font-size: size(md);
+        font-size: size(sm);
         padding: 0 !important;
 
         i {
@@ -487,20 +530,17 @@ nav ul a {
         text-align: center;
         text-transform: uppercase;
         margin: 0 auto 30px;
-        color: color(dark);
         font-size: 50px;
     }
 
     &H2 {
         font-weight: normal;
-        color: color(dark);
         font-size: 30px;
         margin: 0 0 15px;
     }
 
     &H3 {
         font-weight: normal;
-        color: color(dark);
         font-size: 24px;
         text-transform: initial;
         margin: 0 0 10px;
@@ -515,7 +555,7 @@ nav ul a {
             font-size: 24px;
         }
         &H3 {
-            font-size: 20px;
+            font-size: size(xl);
         }
     }
 
@@ -524,13 +564,13 @@ nav ul a {
     }
 
     &FieldError {
-        font-size: 12px;
-        color: #f44336;
+        font-size: size(xs);
+        color: color(error);
         display: block;
     }
 
     &Error {
-        color: #f44336;
+        color: color(error);
         display: block;
     }
 }
@@ -567,7 +607,7 @@ nav ul a {
 // Dashboard stuff
 .borderTopDiv {
     @include flexPosition($dir: column);
-    background-color: #fff;
+    background-color: color(white);
     border-top: solid 10px color(secondary);
     border-radius: 3px 3px 0 0;
     padding: 40px 30px 30px;
@@ -591,37 +631,3 @@ nav ul a {
     }
 }
 // End of dashboard stuff
-
-// Formatting stuff
-.flexColCenter {
-    @include flexPosition($alIte: center, $dir: column);
-}
-
-.longText {
-    padding-right: 200px;
-
-    @include responsive(sm-down) {
-        padding-right: 0;
-    }
-}
-
-.hoverLink {
-    font-weight: 600;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.rowMarginPadding {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding: 0 !important;
-}
-
-.formPadding {
-    @include responsive(sm-down) {
-        padding: 0 !important;
-    }
-}
-// End of formatting stuff
