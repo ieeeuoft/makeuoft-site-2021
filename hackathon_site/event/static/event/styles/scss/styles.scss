@@ -404,9 +404,7 @@ strong {
 
 // Formatting stuff
 .flexColCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flexPosition($alIte: center, $dir: column);
 }
 
 .longText {
