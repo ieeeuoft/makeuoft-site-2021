@@ -104,12 +104,14 @@ nav ul a {
 .landingImg {
     @include flexPosition($jusCon: center, $alIte: center);
 
-    img {
+    img,
+    object {
         width: 100%;
     }
 
     @include responsive(md-down) {
-        img {
+        img,
+        object {
             max-width: 300px;
         }
     }
@@ -194,8 +196,7 @@ nav ul a {
             font-size: 16px;
         }
         > p {
-            margin-right: 0;
-            margin-left: 10px;
+            margin: 2.5px 0 2px 10px;
             font-size: 16px;
         }
     }
@@ -262,6 +263,7 @@ nav ul a {
     &Time {
         margin-right: 20px !important;
         font-weight: bold;
+        white-space: nowrap;
     }
 
     &Row {
@@ -287,6 +289,10 @@ nav ul a {
     &-number {
         margin: 10px 0;
         font-weight: 700;
+    }
+
+    @include responsive(sm-down) {
+        margin-bottom: 25px;
     }
 }
 // End of "Hackathon stats" section
