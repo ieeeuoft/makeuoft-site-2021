@@ -513,7 +513,7 @@ nav ul a {
     }
 
     &Link {
-        @include flexPosition($jusCon: center);
+        @include flexPosition($jusCon: center, $alIte: center);
         margin: 10px 0 15px;
         font-size: size(sm);
         padding: 0 !important;
