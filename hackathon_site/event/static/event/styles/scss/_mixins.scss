@@ -31,13 +31,13 @@
     }
 
     @if ($breakpoint == md-down) {
-        @media (max-width: 960px) {
+        @media (max-width: 992px) {
             @content;
         }
     }
 
     @if ($breakpoint == md-up) {
-        @media (min-width: 960px) {
+        @media (min-width: 992px) {
             @content;
         }
     }

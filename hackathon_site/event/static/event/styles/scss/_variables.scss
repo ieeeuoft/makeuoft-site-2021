@@ -1,19 +1,25 @@
 $colors: (
-    font: #0d061a,
+    font: #333,
     white: #fff,
-    primary: #34196c,
-    secondary: #ffcb17,
-    light: #dad1e9,
-    dark: #271648,
+    primary: #2b7bbc,
+    secondary: #f0ab3a,
+    light: #f6b94a,
+    dark: #333,
+    error: #b00020,
+    success: #0b890b,
+    primaryOnHover: #08529c,
+    secondaryOnHover: #d2a300,
+    errorOnHover: #870000,
+    successOnHover: #1d7521,
 );
 
 $fonts: (
-    body: "Roboto",
-    header: "Roboto",
+    body: "Nunito",
+    header: "Montserrat",
 );
 
 $font-sizes: (
-    xl: 45px,
+    xl: 20px,
     lg: 18px,
     md: 16px,
     sm: 14px,
