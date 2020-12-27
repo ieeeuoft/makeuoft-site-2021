@@ -1,10 +1,11 @@
 {% extends "event/form_base.html" %}
 
+{% block title %}Login - MakeUofT 2021{% endblock %}
 {% block form_title %}Login{% endblock %}
 
 {% block nav_logout_login_links %}{% endblock %}
 
-{% block form_img %}<img src="{{ static('event/images/login.svg') }}" alt="Login image"/>{% endblock %}
+{% block form_img %}<object type="image/svg+xml" data="{{ static('event/images/login.svg') }}"></object>{% endblock %}
 
 {% set form_action=url("event:login") %}
 

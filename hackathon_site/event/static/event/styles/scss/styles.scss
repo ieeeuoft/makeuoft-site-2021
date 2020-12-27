@@ -20,10 +20,16 @@ h3 {
     font-weight: bold;
     text-transform: uppercase;
 }
+h1,
+h2,
+h3 {
+    font-family: font(header);
+}
 
 body {
-    font-size: 18px;
+    font-size: size(lg);
     color: color(font);
+    font-family: font(body);
 }
 
 strong {
@@ -31,10 +37,117 @@ strong {
 }
 // End of general HTML stuff
 
+// Background color change
+.wrapper {
+    transition: background-color 0.3s ease-out;
+}
+
+.scrollColor {
+    transition: color 0.3s ease-out;
+}
+
+.ombreBackground {
+    background: linear-gradient(180deg, #48a0af 60%, #3386ba 120%);
+    min-height: 100vh;
+}
+// End of background color change
+
+// Colors
+.primaryColor {
+    background-color: color(primary) !important;
+}
+
+.secondaryColor {
+    background-color: color(secondary) !important;
+}
+
+.primaryText {
+    color: color(primary) !important;
+}
+
+.secondaryText {
+    color: color(secondary) !important;
+}
+
+.fontText {
+    color: color(font) !important;
+}
+
+.errorText {
+    color: color(error) !important;
+}
+
+.successText {
+    color: color(success) !important;
+}
+
+.colorBtn {
+    font-weight: bold !important;
+    text-align: center;
+    text-transform: uppercase;
+    color: color(font) !important;
+    background-color: color(secondary) !important;
+
+    &:hover {
+        background-color: color(secondaryOnHover) !important;
+    }
+}
+
+.redBtn {
+    font-weight: bold !important;
+    text-align: center;
+    text-transform: uppercase;
+    color: color(white) !important;
+    background-color: color(error) !important;
+
+    &:hover {
+        background-color: color(errorOnHover) !important;
+    }
+}
+
+.active {
+    color: color(secondary);
+}
+// End of colors
+
+// Formatting stuff
+.flexColCenter {
+    @include flexPosition($alIte: center, $dir: column);
+}
+
+.longText {
+    padding-right: 200px;
+
+    @include responsive(sm-down) {
+        padding-right: 0;
+    }
+}
+
+.hoverLink {
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.rowMarginPadding {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+}
+
+.formPadding {
+    @include responsive(sm-down) {
+        padding: 0 !important;
+    }
+}
+// End of formatting stuff
+
 // Navbar stuff
 .logoNav {
     height: 100%;
-    padding: 5px;
+    padding: 5px 0;
 }
 
 .logoNavSide {
@@ -45,6 +158,7 @@ strong {
     img {
         height: 100% !important;
         padding: 0 !important;
+        font-family: font(header);
 
         &:hover {
             background-color: transparent !important;
@@ -55,20 +169,133 @@ strong {
 .navbar {
     position: sticky;
     top: 0;
-    z-index: 1100;
+    background-color: transparent;
+    box-shadow: none;
+    transition: background-color 200ms linear, top 200ms ease-in-out;
+    z-index: 998;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.sidenav-trigger {
+    margin-left: 0 !important;
+}
+
+.scrolled {
+    background-color: rgba(66, 153, 178, 0.95);
+    box-shadow: 2px -5px 8px rgba(0, 0, 0, 0.14), 0 -1px 10px -2px rgba(0, 0, 0, 0.12),
+        0 -1px 15px 0 rgba(0, 0, 0, 0.2);
+}
+
+// Overwrite some Materialize so the the navbar can fit on one line
+nav ul a {
+    @media (max-width: 1080px) {
+        font-size: 13.5px !important;
+        padding: 0 12px !important;
+    }
 }
 // End of navbar stuff
 
 // Landing section
 .landingImg {
-    @include flexPosition($jusCon: center);
+    @include flexPosition($jusCon: center, $alIte: center);
 
-    img {
+    img,
+    object {
         width: 100%;
+    }
+
+    @include responsive(md-down) {
+        img,
+        object {
+            max-width: 300px;
+        }
     }
 
     @include responsive(sm-down) {
         margin-top: 0;
+    }
+}
+
+.landingBackground {
+    background-image: url("../../images/landing-background.svg");
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: center bottom;
+    padding: 100px 0;
+    margin-top: -64px;
+    color: color(white);
+
+    h1 {
+        font-weight: 600;
+    }
+    h4,
+    h5 {
+        font-weight: 400;
+    }
+    h5 {
+        font-family: font(header);
+    }
+
+    @include responsive(md-down) {
+        padding: 60px 0 30px;
+        background-image: url("../../images/landing-background-mobile.svg");
+        h1 {
+            font-size: 50px;
+        }
+        h4 {
+            font-size: 25px;
+        }
+    }
+
+    @include responsive(sm-down) {
+        padding: 0 0 10px;
+        margin-top: -56px;
+        text-align: center;
+        h1 {
+            font-size: 40px;
+        }
+        h4 {
+            font-size: 22px;
+        }
+        h5 {
+            font-size: size(lg);
+        }
+    }
+}
+
+.definition {
+    @include flexPosition($alIte: flex-start);
+    padding: 5px 0 25px;
+    &-shape {
+        clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        background-color: color(secondary);
+        width: auto;
+        border-radius: 100px 14px 100px 100px;
+        padding: 2px 17px 2px 12px;
+        font-size: 18px;
+        font-size: size(lg);
+        font-style: italic;
+        color: color(font);
+        font-weight: 700;
+    }
+
+    > p {
+        font-weight: 400;
+        margin: 4px 20px 0 15px;
+        text-align: left !important;
+    }
+
+    @include responsive(sm-down) {
+        padding: 5px 0 15px;
+        &-shape {
+            padding: 2px 17px 2px 12px;
+            font-size: 16px;
+        }
+        > p {
+            margin: 2.5px 0 2px 10px;
+            font-size: 16px;
+        }
     }
 }
 // End of landing section
@@ -80,9 +307,7 @@ strong {
     }
 }
 .countdown {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flexPosition($jusCon: center, $alIte: center);
 
     &Days {
         margin-top: 20px;
@@ -97,11 +322,10 @@ strong {
         font-size: 106px;
         text-align: center;
         background-color: color(secondary);
-        color: #0d061a;
-        display: flex;
-        flex-direction: column;
+        @include flexPosition($dir: column);
         margin: 0 5px;
         padding: 0 !important;
+        font-family: font(header);
     }
 
     &WhiteLine {
@@ -123,23 +347,31 @@ strong {
 .schedule {
     margin: 10px 0 30px;
 
+    h5 {
+        font-family: font(header);
+        font-weight: 500;
+    }
+
     p {
-        font-size: 20px;
+        font-size: size(xl);
         margin: 0;
     }
 
     &Time {
-        width: 80px;
+        margin-right: 20px !important;
+        font-weight: bold;
+        white-space: nowrap;
     }
 
     &Row {
         display: flex;
-        margin: 10px 0;
+        margin: 10px 0 25px;
+        justify-content: center;
     }
 
     @include responsive(md-down) {
         p {
-            font-size: 18px;
+            font-size: size(lg);
         }
         &Time {
             width: 70px;
@@ -148,29 +380,77 @@ strong {
 }
 // End of "Schedule" section
 
+// "Hackathon stats" section
+.stat {
+    @include flexPosition($alIte: center, $dir: column);
+    &-number {
+        margin: 10px 0;
+        font-weight: 700;
+    }
+
+    @include responsive(sm-down) {
+        margin-bottom: 25px;
+    }
+}
+// End of "Hackathon stats" section
+
 // "Sponsors" section
 .sponsorImgs {
     margin-top: 50px;
+    @include flexPosition($jusCon: center);
 
     img {
-        height: 100%;
         width: 100%;
-        max-height: 150px;
-        padding-bottom: 50px;
+        padding: 0 20px 50px;
+        max-width: 600px;
     }
 }
 // End of "Sponsors" section
 
 // "FAQ" section
 .collapsible .active {
-    color: color(primary);
+    color: inherit;
 }
+
+.active .collapsible-header {
+    font-weight: bold;
+}
+
+.collapsible,
+.collapsible-body,
+.collapsible-header {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+}
+.collapsible-header {
+    background-color: transparent;
+}
+
 // End of "FAQ" section
 
 // Video section
 .video {
     max-width: 1000px;
     width: 90%;
+    height: 557px;
+
+    // iframe heights are static so I have to set the height every time
+    @include responsive(lg-down) {
+        height: 400px;
+    }
+
+    @include responsive(md-down) {
+        height: 360px;
+    }
+
+    @include responsive(sm-down) {
+        height: 250px;
+    }
+
+    @include responsive(xs-down) {
+        height: 200px;
+    }
 }
 // End of video section
 
@@ -211,57 +491,11 @@ strong {
 }
 // End of section
 
-// Colors
-.primaryColor {
-    background-color: color(primary) !important;
-}
-
-.secondaryColor {
-    background-color: color(secondary) !important;
-}
-
-.primaryText {
-    color: color(primary) !important;
-}
-
-.secondaryText {
-    color: color(secondary) !important;
-}
-
-.colorBtn {
-    font-weight: bold !important;
-    text-align: center;
-    text-transform: uppercase;
-    color: color(font) !important;
-    background-color: color(secondary) !important;
-
-    &:hover {
-        background-color: #d2a300 !important;
-    }
-}
-
-.redBtn {
-    font-weight: bold !important;
-    text-align: center;
-    text-transform: uppercase;
-    color: #f3c7c7 !important;
-    background-color: #b40000 !important;
-
-    &:hover {
-        background-color: #870000 !important;
-    }
-}
-
-.active {
-    color: color(secondary);
-}
-// End of colors
-
 // Login stuff
 .login {
     &Div {
         display: flex;
-        background-color: #fff;
+        background-color: color(white);
         border-top: solid 10px color(secondary);
         border-radius: 3px 3px 0 0;
         padding: 50px 30px 30px;
@@ -283,10 +517,9 @@ strong {
     }
 
     &Link {
-        display: flex;
-        justify-content: center;
+        @include flexPosition($jusCon: center, $alIte: center);
         margin: 10px 0 15px;
-        font-size: size(md);
+        font-size: size(sm);
         padding: 0 !important;
 
         i {
@@ -301,20 +534,17 @@ strong {
         text-align: center;
         text-transform: uppercase;
         margin: 0 auto 30px;
-        color: color(dark);
         font-size: 50px;
     }
 
     &H2 {
         font-weight: normal;
-        color: color(dark);
         font-size: 30px;
         margin: 0 0 15px;
     }
 
     &H3 {
         font-weight: normal;
-        color: color(dark);
         font-size: 24px;
         text-transform: initial;
         margin: 0 0 10px;
@@ -329,7 +559,7 @@ strong {
             font-size: 24px;
         }
         &H3 {
-            font-size: 20px;
+            font-size: size(xl);
         }
     }
 
@@ -338,13 +568,13 @@ strong {
     }
 
     &FieldError {
-        font-size: 12px;
-        color: #f44336;
+        font-size: size(xs);
+        color: color(error);
         display: block;
     }
 
     &Error {
-        color: #f44336;
+        color: color(error);
         display: block;
     }
 }
@@ -380,9 +610,8 @@ strong {
 
 // Dashboard stuff
 .borderTopDiv {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
+    @include flexPosition($dir: column);
+    background-color: color(white);
     border-top: solid 10px color(secondary);
     border-radius: 3px 3px 0 0;
     padding: 40px 30px 30px;
@@ -406,39 +635,3 @@ strong {
     }
 }
 // End of dashboard stuff
-
-// Formatting stuff
-.flexColCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.longText {
-    padding-right: 200px;
-
-    @include responsive(sm-down) {
-        padding-right: 0;
-    }
-}
-
-.hoverLink {
-    font-weight: 600;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.rowMarginPadding {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding: 0 !important;
-}
-
-.formPadding {
-    @include responsive(sm-down) {
-        padding: 0 !important;
-    }
-}
-// End of formatting stuff
