@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&amp;display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700&amp;display=swap" rel="stylesheet">
         
-        <title>{% block title %}MakeUofT 2021{% endblock %}</title>
+        <title>{% block title %}{{ hackathon_name }} {{ localtime(event_start_date).strftime("%Y") }}{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{{ static('event/styles/css/styles.css') }}" />
 
         <!-- Favicon -->
