@@ -318,29 +318,11 @@ class MailerTestCase(SetupUserMixin, TestCase):
         users = User.objects.filter(username__in=[u.username for u in users])
         teams = Team.objects.filter(team_code__in=[t.team_code for t in teams])
 
-        application_data = {
-            "birthday": date(2000, 1, 1),
-            "gender": "no-answer",
-            "ethnicity": "no-answer",
-            "phone_number": "1234567890",
-            "school": "UofT",
-            "study_level": "other",
-            "graduation_year": 2020,
-            "q1": "hi",
-            "q2": "there",
-            "q3": "foo",
-            "conduct_agree": True,
-            "data_agree": True,
-            "resume": "uploads/resumes/my_resume.pdf",
-        }
-
         applications = []
         # Not using bulk_create here so we can be sure we're using the
         # right applications below
         for user, team in zip(users, teams):
-            application = Application.objects.create(
-                user=user, team=team, **application_data
-            )
+            application = self._apply_as_user(user=user, team=team)
             applications.append(application)
 
         reviews = []
