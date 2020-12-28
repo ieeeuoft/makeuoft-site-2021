@@ -1,15 +1,17 @@
 import re
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 from django.urls import reverse
 from django.core import mail
 from django.conf import settings
-from hackathon_site.tests import SetupUserMixin
 from django.contrib.auth.models import Permission
 from django.db.models import Q
 from rest_framework import status
+
+from hackathon_site.tests import SetupUserMixin
+from registration.models import Application, Team
 from review.models import Review, User
 
 
@@ -22,7 +24,8 @@ class MailerTestCase(SetupUserMixin, TestCase):
         self.user.save()
 
         self.form_data = {
-            "date_start": datetime.now().replace(tzinfo=settings.TZ_INFO).date(),
+            "date_start": datetime.now().replace(tzinfo=settings.TZ_INFO).date()
+            - timedelta(days=1),
             "date_end": datetime.now().replace(tzinfo=settings.TZ_INFO).date()
             + timedelta(days=1),
             "status": "Accepted",
@@ -285,3 +288,133 @@ class MailerTestCase(SetupUserMixin, TestCase):
             "we are not able to offer you a spot in the event this year",
             clean_mail_body,
         )
+
+    def test_first_200_applied_accepted_get_reimbursement_message(self):
+        """
+        The first 200 people to apply are eligible for reimbursement.
+
+        If they were accepted, there should be an additional paragraph
+        in their email.
+        """
+
+        # Bulk create 204 users and applications. This speeds things up
+        # quite a bit over using self._make_full_registration_team 51 times
+        users = []
+        teams = []
+        for i in range(204):
+            users.append(
+                User(
+                    username=f"{i}_of_204@{i}.com",
+                    email=f"{i}_of_204@{i}.com",
+                    # Password isn't properly hashed, but that's fine for this
+                    # test since it speeds it up and we don't need to log in
+                    password="foobar123",
+                    first_name=str(i),
+                    last_name=str(i),
+                )
+            )
+
+            teams.append(Team(team_code=str(i) * 5))
+
+        User.objects.bulk_create(users)
+        Team.objects.bulk_create(teams)
+
+        # Fetch the ids from the database
+        users = User.objects.filter(username__in=[u.username for u in users])
+        teams = Team.objects.filter(team_code__in=[t.team_code for t in teams])
+
+        application_data = {
+            "birthday": date(2000, 1, 1),
+            "gender": "no-answer",
+            "ethnicity": "no-answer",
+            "phone_number": "1234567890",
+            "school": "UofT",
+            "study_level": "other",
+            "graduation_year": 2020,
+            "q1": "hi",
+            "q2": "there",
+            "q3": "foo",
+            "conduct_agree": True,
+            "data_agree": True,
+            "resume": "uploads/resumes/my_resume.pdf",
+        }
+
+        applications = []
+        # Not using bulk_create here so we can be sure we're using the
+        # right applications below
+        for user, team in zip(users, teams):
+            application = Application.objects.create(
+                user=user, team=team, **application_data
+            )
+            applications.append(application)
+
+        reviews = []
+        # Applications 1-50 get accepted
+        for application in applications[:50]:
+            reviews.append(
+                self._review(
+                    application=application,
+                    status="Accepted",
+                    decision_sent_date=None,
+                    save=False,
+                )
+            )
+
+        # Applications 51-100 are rejected
+        for application in applications[50:100]:
+            reviews.append(
+                self._review(
+                    application=application,
+                    status="Rejected",
+                    decision_sent_date=None,
+                    save=False,
+                )
+            )
+
+        # applications 101-204 are accepted
+        for application in applications[100:]:
+            reviews.append(
+                self._review(
+                    application=application,
+                    status="Accepted",
+                    decision_sent_date=None,
+                    save=False,
+                )
+            )
+
+        Review.objects.bulk_create(reviews)
+
+        # Send acceptance emails
+        self._login()
+        self.form_data["quantity"] = 200  # There are less than 200
+        self.client.post(self.view, data=self.form_data)
+
+        self.assertEqual(len(mail.outbox), 154)
+
+        # Using just the first message to make sure their email is getting
+        # rendered correctly, to speed up the tests
+        application = Application.objects.order_by("id").first()
+        expected_message = (
+            "Once your project has been submitted, you will "
+            "receive an e-transfer from us to this email address, "
+            f"{application.user.email}"
+        )
+        self.assertIn(expected_message, mail.outbox[0].body)
+
+        # First 50 should have the reimbursement message
+        for i in range(50):
+            self.assertIn(
+                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+            )
+
+        # Next 100 (applications 101-200) should have the reimbursement message
+        for i in range(50, 150):
+            self.assertIn(
+                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+            )
+
+        # Next 4 (applications 201-204) should not have the message
+        for i in range(150, 154):
+            self.assertNotIn(
+                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+            )
