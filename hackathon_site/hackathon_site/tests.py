@@ -133,7 +133,7 @@ class SetupUserMixin:
         return team
 
     def _review(
-        self, application=None, reviewer=None, **kwargs,
+        self, application=None, reviewer=None, save=True, **kwargs,
     ):
         if application is None:
             application = self.user.application
@@ -163,7 +163,12 @@ class SetupUserMixin:
         }
         default_kwargs.update(kwargs)
 
-        self.review = Review.objects.create(**default_kwargs)
+        review = Review(**default_kwargs)
+        if save:
+            review.save()
+            self.review = review
+
+        return review
 
 
 @override_settings(IN_TESTING=False)
