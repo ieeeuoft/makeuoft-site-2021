@@ -8,8 +8,6 @@ from django.views.generic.edit import FormView
 from django.conf import settings
 
 from hackathon_site.utils import is_registration_open
-from registration.forms import JoinTeamForm
-from registration.models import Team
 
 
 def _now():
@@ -56,28 +54,13 @@ class DashboardView(LoginRequiredMixin, FormView):
         if hasattr(self.request.user.application, "review"):
             return None
 
-        if is_registration_open():
-            return JoinTeamForm(**self.get_form_kwargs())
-
         return None
 
     def form_valid(self, form):
         """
         As above, what form we're dealing with depends on the user's progress through
-        the application cycle.
+        the application cycle. Previously logic for joining a team was here.
         """
-
-        if isinstance(form, JoinTeamForm):
-            application = self.request.user.application
-            new_team = Team.objects.get(team_code=form.cleaned_data["team_code"])
-            old_team = application.team
-
-            application.team = new_team
-            application.save()
-
-            # Delete the old team if it is empty
-            if not old_team.applications.exists():
-                old_team.delete()
 
         return redirect(self.get_success_url())
 
@@ -148,11 +131,6 @@ class DashboardView(LoginRequiredMixin, FormView):
             context["status"] = "Offer Declined"
         else:
             context["status"] = "Unknown"
-
-        # The form from ``self.get_form()`` will always be available in
-        # ``context["form"]``. Naming it explicitly helps with template logic.
-        if isinstance(context["form"], JoinTeamForm):
-            context["join_team_form"] = context["form"]
 
         return context
 

@@ -8,7 +8,7 @@ from django_registration import validators
 
 from hackathon_site.tests import SetupUserMixin
 from registration.models import User, Team, Application
-from registration.forms import SignUpForm, ApplicationForm, JoinTeamForm
+from registration.forms import SignUpForm, ApplicationForm
 
 
 class SignUpFormTestCase(TestCase):
@@ -241,37 +241,3 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
         form = self._build_form()
         self.assertFalse(form.is_valid())
         self.assertIn("Registration has closed.", form.non_field_errors())
-
-
-class JoinTeamFormTestCase(SetupUserMixin, TestCase):
-    def setUp(self):
-        super().setUp()
-        self.team = Team.objects.create(team_code="AAAAA")
-
-    def test_team_not_found(self):
-        form = JoinTeamForm(data={"team_code": "BBBBB"})
-        self.assertFalse(form.is_valid())
-        self.assertIn("Team BBBBB does not exist.", form.errors["team_code"])
-
-    def test_team_full(self):
-        self._make_full_registration_team(self.team)
-
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertFalse(form.is_valid())
-        self.assertIn(f"Team {self.team.team_code} is full.", form.errors["team_code"])
-
-    def test_team_has_space(self):
-        self._apply_as_user(self.user, self.team)
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertTrue(form.is_valid())
-
-    @patch("registration.forms.is_registration_open")
-    def test_registration_has_closed(self, mock_is_registration_open):
-        mock_is_registration_open.return_value = False
-        self._apply_as_user(self.user, self.team)
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertFalse(form.is_valid())
-        self.assertIn(
-            "You cannot change teams after registration has closed.",
-            form.non_field_errors(),
-        )
