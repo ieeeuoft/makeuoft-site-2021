@@ -173,31 +173,6 @@ class DashboardTestCase(SetupUserMixin, TestCase):
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
 
-    def test_dashboard_when_accepted_waiting_for_rsvp(self):
-        """
-        Test the dashboard when the user has been accepted and the IEEE team is waiting
-        for their RSVP.
-        """
-        self._login()
-        self._apply()
-        self._review()
-        response = self.client.get(self.view)
-
-        self.assertContains(response, "Accepted, awaiting RSVP")
-        self.assertContains(
-            response, f"You've been accepted into {settings.HACKATHON_NAME}!"
-        )
-
-        # Buttons for RSVP appear
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
-        # Can't join teams anymore because reviewed
-        self.assertNotContains(response, "Join a different team")
 
     def test_dashboard_when_waitlisted(self):
         """
@@ -211,13 +186,6 @@ class DashboardTestCase(SetupUserMixin, TestCase):
         self.assertContains(response, "Waitlisted")
         self.assertContains(
             response, f"You've been waitlisted for {settings.HACKATHON_NAME}"
-        )
-        # Buttons for RSVP don't appear
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
         )
 
         # Can't join teams anymore because reviewed
@@ -237,20 +205,13 @@ class DashboardTestCase(SetupUserMixin, TestCase):
             response, f"You've been rejected from {settings.HACKATHON_NAME}"
         )
 
-        # Buttons for RSVP don't appear
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
 
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
 
-    def test_dashboard_rsvp_offer_accepted_and_before_rsvp_deadline(self):
+    def test_dashboard_offer_accepted(self):
         """
-        Test the dashboard when user has RSVPed yes and they are still within the RSVP deadline
+        Test the dashboard when user has been accepted
         """
         self._login()
         self._apply()
@@ -269,150 +230,9 @@ class DashboardTestCase(SetupUserMixin, TestCase):
         self.assertContains(response, f"{settings.CHAT_ROOM[0]}")
         self.assertContains(response, f"{settings.CHAT_ROOM[1]}")
 
-        # Buttons for RSVP still appear
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
 
-    def test_dashboard_rsvp_offer_declined_and_before_rsvp_deadline(self):
-        """
-        Test the dashboard when user has RSVPed no and they are still within the RSVP deadline
-        """
-        self._login()
-        self._apply()
-        self._review()
-        self.user.application.rsvp = False
-        self.user.application.save()
-        self.user.application.refresh_from_db()
-
-        response = self.client.get(self.view)
-
-        self.assertContains(response, "Offer Declined")
-        self.assertContains(
-            response, f"You've been accepted into {settings.HACKATHON_NAME}!"
-        )
-
-        # Buttons for RSVP still appear
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
-        # Can't join teams anymore because reviewed
-        self.assertNotContains(response, "Join a different team")
-
-    def test_dashboard_rsvp_offer_accepted_and_rsvp_deadline_passed(self):
-        """
-        Test the dashboard when user has RSVPed yes and the RSVP deadline has passed
-        """
-        self._login()
-        self._apply()
-        decision_sent_date = datetime.now().replace(
-            tzinfo=settings.TZ_INFO
-        ) - timedelta(days=settings.RSVP_DAYS + 1)
-
-        self._review(decision_sent_date=decision_sent_date)
-        self.user.application.rsvp = True
-        self.user.application.save()
-        self.user.application.refresh_from_db()
-
-        response = self.client.get(self.view)
-
-        self.assertContains(
-            response,
-            f"Thanks for confirming your position at {settings.HACKATHON_NAME}! We look forward to seeing you there.",
-        )
-        self.assertContains(
-            response, "Note that you cannot change your RSVP at this time."
-        )
-        self.assertContains(response, "The RSVP deadline has passed.")
-
-        # Buttons for RSVP don't appear anymore because rsvp deadline passed
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
-        # Can't join teams anymore because reviewed
-        self.assertNotContains(response, "Join a different team")
-
-    def test_dashboard_rsvp_offer_declined_and_rsvp_deadline_passed(self):
-        """
-        Test the dashboard when user has RSVPed no and the RSVP deadline has passed
-        """
-        self._login()
-        self._apply()
-        decision_sent_date = datetime.now().replace(
-            tzinfo=settings.TZ_INFO
-        ) - timedelta(days=settings.RSVP_DAYS + 1)
-
-        self._review(decision_sent_date=decision_sent_date)
-        self.user.application.rsvp = False
-        self.user.application.save()
-        self.user.application.refresh_from_db()
-
-        response = self.client.get(self.view)
-
-        self.assertContains(
-            response,
-            f"We regret to see that you will not be joining us this year at {settings.HACKATHON_NAME}.",
-        )
-        self.assertContains(
-            response, "Unfortunately you cannot change your RSVP at this time."
-        )
-        self.assertContains(response, "The RSVP deadline has passed.")
-
-        # Buttons for RSVP don't appear anymore because rsvp deadline passed
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
-        # Can't join teams anymore because reviewed
-        self.assertNotContains(response, "Join a different team")
-
-    def test_dashboard_no_rsvp_and_rsvp_deadline_passed(self):
-        """
-        Test the dashboard when user has not given an RSVP and the RSVP deadline has passed
-        """
-        self._login()
-        self._apply()
-        decision_sent_date = datetime.now().replace(
-            tzinfo=settings.TZ_INFO
-        ) - timedelta(days=settings.RSVP_DAYS + 1)
-
-        self._review(decision_sent_date=decision_sent_date)
-
-        response = self.client.get(self.view)
-
-        self.assertContains(response, "It appears you haven't RSVPed.")
-        self.assertContains(
-            response,
-            "Unfortunately the RSVP deadline has passed and you cannot change your RSVP at this time.",
-        )
-
-        # Buttons for RSVP don't appear anymore because rsvp deadline passed
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "yes"})
-        )
-        self.assertNotContains(
-            response, reverse("registration:rsvp", kwargs={"rsvp": "no"})
-        )
-
-        # Can't join teams anymore because reviewed
-        self.assertNotContains(response, "Join a different team")
 
     @patch("event.views.is_registration_open")
     def test_when_not_applied_and_applications_closed(self, mock_is_registration_open):
