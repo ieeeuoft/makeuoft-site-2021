@@ -173,7 +173,6 @@ class DashboardTestCase(SetupUserMixin, TestCase):
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
 
-
     def test_dashboard_when_waitlisted(self):
         """
         Test the dashboard when user has been waitlisted
@@ -205,7 +204,6 @@ class DashboardTestCase(SetupUserMixin, TestCase):
             response, f"You've been rejected from {settings.HACKATHON_NAME}"
         )
 
-
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
 
@@ -232,7 +230,6 @@ class DashboardTestCase(SetupUserMixin, TestCase):
 
         # Can't join teams anymore because reviewed
         self.assertNotContains(response, "Join a different team")
-
 
     @patch("event.views.is_registration_open")
     def test_when_not_applied_and_applications_closed(self, mock_is_registration_open):

@@ -288,5 +288,3 @@ class LeaveTeamViewTestCase(SetupUserMixin, TestCase):
             "You cannot change teams after registration has closed.",
             status_code=status.HTTP_400_BAD_REQUEST,
         )
-
-
