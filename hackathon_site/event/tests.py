@@ -222,7 +222,7 @@ class DashboardTestCase(SetupUserMixin, TestCase):
 
         response = self.client.get(self.view)
 
-        self.assertContains(response, "Offer Accepted")
+        self.assertContains(response, "Accepted")
         self.assertContains(
             response, f"You've been accepted into {settings.HACKATHON_NAME}!"
         )
