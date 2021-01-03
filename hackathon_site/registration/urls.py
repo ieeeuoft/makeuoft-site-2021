@@ -23,5 +23,4 @@ urlpatterns = [
         name="activate",
     ),
     path("application/", views.ApplicationView.as_view(), name="application"),
-    re_path("rsvp/(?P<rsvp>yes|no)/$", views.RSVPView.as_view(), name="rsvp"),
 ]
