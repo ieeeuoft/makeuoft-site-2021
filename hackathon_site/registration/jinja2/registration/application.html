@@ -36,7 +36,7 @@
         {% if field.field.widget.__class__.__name__ == "Textarea" %}
             {{ render_field(field, size="s12", show_help_text_as_label=True) }}
         {% elif field.field.widget.input_type == "select" %}
-            {{ render_field(field, size="s12 select2-wrapper") }}
+            {{ render_field(field, size="s12 select2-wrapper", show_help_text_as_label=True) }}
         {% elif field.field.widget.input_type == "file" %}
             {{ render_field(field, size="s12", show_label=False) }}
         {% elif field.field.widget.input_type == "checkbox" %}

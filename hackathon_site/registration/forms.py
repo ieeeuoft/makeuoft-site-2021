@@ -82,14 +82,12 @@ class ApplicationForm(forms.ModelForm):
             "birthday",
             "gender",
             "ethnicity",
-            "phone_number",
             "school",
             "study_level",
             "graduation_year",
             "resume",
-            "q1",
-            "q2",
-            "q3",
+            "resume_sharing",
+            "eligibility_agree",
             "conduct_agree",
             "data_agree",
         ]
@@ -101,28 +99,6 @@ class ApplicationForm(forms.ModelForm):
                 choices=((None, ""),),
             ),
             "resume": MaterialFileInput(),
-            "q1": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "I enjoy cake",
-                    "data-length": 1000,
-                }
-            ),
-            "q2": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "Cake is wonderful",
-                    "data-length": 1000,
-                }
-            ),
-            "q3": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "I could really go for cake right now",
-                    "data-length": 1000,
-                }
-            ),
-            "phone_number": forms.TextInput(attrs={"placeholder": "+1 (123) 456-7890"}),
             "graduation_year": forms.NumberInput(attrs={"placeholder": 2020}),
         }
 
