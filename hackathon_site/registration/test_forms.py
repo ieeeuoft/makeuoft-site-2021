@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from io import BytesIO
 from unittest.mock import patch
 
@@ -8,7 +8,7 @@ from django_registration import validators
 
 from hackathon_site.tests import SetupUserMixin
 from registration.models import User, Team, Application
-from registration.forms import SignUpForm, ApplicationForm, JoinTeamForm
+from registration.forms import SignUpForm, ApplicationForm
 
 
 class SignUpFormTestCase(TestCase):
@@ -79,16 +79,14 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.data = {
-            "birthday": date(2020, 9, 8),
+            "birthday": date(2000, 9, 8),
             "gender": "no-answer",
             "ethnicity": "no-answer",
-            "phone_number": "1234567890",
             "school": "UofT",
-            "study_level": "other",
+            "study_level": "undergraduate",
             "graduation_year": 2020,
-            "q1": "hi",
-            "q2": "there",
-            "q3": "foo",
+            "resume_sharing": False,
+            "eligibility_agree": True,
             "conduct_agree": True,
             "data_agree": True,
         }
@@ -121,11 +119,14 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
 
     def test_fields_are_required(self):
         for field in self.data:
+            if field == "resume_sharing":
+                continue
+
             bad_data = self.data.copy()
             del bad_data[field]
 
             form = self._build_form(data=bad_data)
-            self.assertFalse(form.is_valid())
+            self.assertFalse(form.is_valid(), msg=field)
             self.assertIn(field, form.errors, msg=field)
             self.assertIn("This field is required.", form.errors[field], msg=field)
 
@@ -165,29 +166,6 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
         self.assertEqual(Team.objects.count(), 1)  # Team still gets created for the FK
         self.assertEqual(Application.objects.count(), 0)
 
-    def test_phone_number_regex(self):
-        valid_numbers = [
-            "+1 123 456 7890",
-            "+121234567890",
-            "+1231234567890",
-            "1234567890",
-            "(123) 246-7890",
-            "123 456 7890",
-        ]
-        for number in valid_numbers:
-            data = self.data.copy()
-            data["phone_number"] = number
-            form = self._build_form(data=data)
-            self.assertTrue(form.is_valid(), msg=number)
-
-        invalid_numbers = ["abcdefghij", "+12341234567890"]
-        for number in invalid_numbers:
-            data = self.data.copy()
-            data["phone_number"] = number
-            form = self._build_form(data=data)
-            self.assertFalse(form.is_valid(), msg=number)
-            self.assertIn("Enter a valid phone number.", form.errors["phone_number"])
-
     def test_graduation_year_validator(self):
         def assert_bad_graduation_year(form):
             self.assertFalse(form.is_valid())
@@ -215,6 +193,25 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
         form = self._build_form(data=data)
         assert_bad_graduation_year(form)
 
+    def test_birthday_validator(self):
+        def assert_bad_birthday(form):
+            self.assertFalse(form.is_valid())
+            self.assertIn(
+                "You must be over 18 years old on February 6, 2021 to participate in MakeUofT.",
+                form.errors["birthday"],
+            )
+
+        birthday_min = date(2003, 2, 6)
+
+        data = self.data.copy()
+        data["birthday"] = birthday_min + timedelta(days=1)
+        form = self._build_form(data=data)
+        assert_bad_birthday(form)
+
+        data["birthday"] = birthday_min
+        form = self._build_form(data=data)
+        self.assertTrue(form.is_valid())
+
     def test_resume_wrong_type(self):
         files = self._build_files(name="my_resume.jpg", content_type="image/jpeg")
         form = self._build_form(files=files)
@@ -241,37 +238,3 @@ class ApplicationFormTestCase(SetupUserMixin, TestCase):
         form = self._build_form()
         self.assertFalse(form.is_valid())
         self.assertIn("Registration has closed.", form.non_field_errors())
-
-
-class JoinTeamFormTestCase(SetupUserMixin, TestCase):
-    def setUp(self):
-        super().setUp()
-        self.team = Team.objects.create(team_code="AAAAA")
-
-    def test_team_not_found(self):
-        form = JoinTeamForm(data={"team_code": "BBBBB"})
-        self.assertFalse(form.is_valid())
-        self.assertIn("Team BBBBB does not exist.", form.errors["team_code"])
-
-    def test_team_full(self):
-        self._make_full_registration_team(self.team)
-
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertFalse(form.is_valid())
-        self.assertIn(f"Team {self.team.team_code} is full.", form.errors["team_code"])
-
-    def test_team_has_space(self):
-        self._apply_as_user(self.user, self.team)
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertTrue(form.is_valid())
-
-    @patch("registration.forms.is_registration_open")
-    def test_registration_has_closed(self, mock_is_registration_open):
-        mock_is_registration_open.return_value = False
-        self._apply_as_user(self.user, self.team)
-        form = JoinTeamForm(data={"team_code": self.team.team_code})
-        self.assertFalse(form.is_valid())
-        self.assertIn(
-            "You cannot change teams after registration has closed.",
-            form.non_field_errors(),
-        )
