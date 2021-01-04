@@ -1,7 +1,9 @@
+from datetime import date
+import uuid
+
 from django.db import models
 from django.core import validators
 from django.contrib.auth import get_user_model
-import uuid
 
 from registration.validators import UploadedFileValidator
 
@@ -50,10 +52,8 @@ class Application(models.Model):
 
     STUDY_LEVEL_CHOICES = [
         (None, ""),
-        ("highschool", "High School"),
         ("undergraduate", "Undergraduate"),
         ("gradschool", "Graduate School"),
-        ("other", "Other"),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
@@ -62,20 +62,18 @@ class Application(models.Model):
     )
 
     # User Submitted Fields
-    birthday = models.DateField(null=False)
-    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, null=False)
-    ethnicity = models.CharField(max_length=50, choices=ETHNICITY_CHOICES, null=False)
-    phone_number = models.CharField(
-        max_length=20,
+    birthday = models.DateField(
         null=False,
         validators=[
-            validators.RegexValidator(
-                r"^(?:\+\d{1,3})?\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$",
-                message="Enter a valid phone number.",
+            validators.MaxValueValidator(
+                date(2003, 2, 6),
+                message="You must be over 18 years old on February 6, 2021 to participate in MakeUofT.",
             )
         ],
     )
-    school = models.CharField(max_length=255, null=False,)
+    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, null=False)
+    ethnicity = models.CharField(max_length=50, choices=ETHNICITY_CHOICES, null=False)
+    school = models.CharField(help_text="University", max_length=255, null=False,)
     study_level = models.CharField(
         max_length=50, choices=STUDY_LEVEL_CHOICES, null=False
     )
@@ -99,11 +97,20 @@ class Application(models.Model):
         ],
         null=False,
     )
-    q1 = models.TextField(null=False, help_text="First question?", max_length=1000)
-    q2 = models.TextField(null=False, help_text="Second question?", max_length=1000)
-    q3 = models.TextField(null=False, help_text="Third question?", max_length=1000)
+    resume_sharing = models.BooleanField(
+        help_text="I consent to IEEE UofT sharing my resume with event sponsors (optional).",
+        default=False,
+        null=False,
+    )
+    eligibility_agree = models.BooleanField(
+        help_text="I confirm that I will be over 18 years old and a university student "
+        "on February 6, 2021.",
+        blank=False,
+        null=False,
+    )
     conduct_agree = models.BooleanField(
-        help_text="I have read and agree to the code of conduct.",
+        help_text="I have read and agree to the "
+        '<a href="https://docs.google.com/document/d/1RH36R1nt8KQfKtd2YoNAJNuaCW5um55a6oVP_bWRK6U/edit" target="_blank">code of conduct</a>.',
         blank=False,
         null=False,
     )

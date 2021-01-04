@@ -5,7 +5,7 @@
         {{ field }}
         {% if show_label %}
             {% if show_help_text_as_label %}
-                <label for="{{ field.id_for_label }}">{{ field.help_text }}</label>
+                <label for="{{ field.id_for_label }}">{{ field.help_text|safe or field.label}}</label>
             {% else %}
                 {{ field.label_tag() }}
             {% endif %}

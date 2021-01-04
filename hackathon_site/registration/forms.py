@@ -82,14 +82,12 @@ class ApplicationForm(forms.ModelForm):
             "birthday",
             "gender",
             "ethnicity",
-            "phone_number",
             "school",
             "study_level",
             "graduation_year",
             "resume",
-            "q1",
-            "q2",
-            "q3",
+            "resume_sharing",
+            "eligibility_agree",
             "conduct_agree",
             "data_agree",
         ]
@@ -101,28 +99,6 @@ class ApplicationForm(forms.ModelForm):
                 choices=((None, ""),),
             ),
             "resume": MaterialFileInput(),
-            "q1": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "I enjoy cake",
-                    "data-length": 1000,
-                }
-            ),
-            "q2": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "Cake is wonderful",
-                    "data-length": 1000,
-                }
-            ),
-            "q3": forms.Textarea(
-                attrs={
-                    "class": "materialize-textarea",
-                    "placeholder": "I could really go for cake right now",
-                    "data-length": 1000,
-                }
-            ),
-            "phone_number": forms.TextInput(attrs={"placeholder": "+1 (123) 456-7890"}),
             "graduation_year": forms.NumberInput(attrs={"placeholder": 2020}),
         }
 
@@ -132,6 +108,7 @@ class ApplicationForm(forms.ModelForm):
         self.label_suffix = ""
         self.fields["conduct_agree"].required = True
         self.fields["data_agree"].required = True
+        self.fields["eligibility_agree"].required = True
 
     def clean(self):
         if not is_registration_open():
@@ -158,34 +135,3 @@ class ApplicationForm(forms.ModelForm):
             self.save_m2m()
 
         return self.instance
-
-
-class JoinTeamForm(forms.Form):
-    team_code = forms.CharField()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.label_suffix = ""
-        self.error_css_class = "invalid"
-
-    def clean(self):
-        if not is_registration_open():
-            raise forms.ValidationError(
-                _("You cannot change teams after registration has closed."),
-                code="registration_closed",
-            )
-
-        return super().clean()
-
-    def clean_team_code(self):
-        team_code = self.cleaned_data["team_code"]
-
-        try:
-            team = Team.objects.get(team_code=team_code)
-        except Team.DoesNotExist:
-            raise forms.ValidationError(_(f"Team {team_code} does not exist."))
-
-        if team.applications.count() >= Team.MAX_MEMBERS:
-            raise forms.ValidationError(_(f"Team {team_code} is full."))
-
-        return team_code

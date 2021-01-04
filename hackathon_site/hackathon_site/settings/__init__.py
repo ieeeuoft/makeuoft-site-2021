@@ -44,9 +44,10 @@ if DEBUG:
     DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
     # NOTE: If you aren't ieee uoft, put your websites here
-    ALLOWED_HOSTS = ["ieee.utoronto.ca"]
+    ALLOWED_HOSTS = ["ieee.utoronto.ca", ".makeuoft.ca"]
     CORS_ORIGIN_REGEX_WHITELIST = [
-        r"^https://ieee\.utoronto.ca:?\d*$",
+        r"^https://ieee\.utoronto\.ca:?\d*$",
+        r"^https://(?:.+\.)?makeuoft\.ca:?\d*$",
     ]
 
     EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
@@ -260,7 +261,7 @@ LOGGING = {
 HACKATHON_NAME = "MakeUofT"
 CONTACT_EMAIL = DEFAULT_FROM_EMAIL
 
-REGISTRATION_OPEN_DATE = datetime(2021, 1, 7, tzinfo=TZ_INFO)
+REGISTRATION_OPEN_DATE = datetime(2021, 1, 8, tzinfo=TZ_INFO)
 REGISTRATION_CLOSE_DATE = datetime(2021, 2, 4, 23, 59, 59, tzinfo=TZ_INFO)
 EVENT_START_DATE = datetime(2021, 2, 6, 10, 0, 0, tzinfo=TZ_INFO)
 EVENT_END_DATE = datetime(2021, 2, 21, 23, 59, 59, tzinfo=TZ_INFO)

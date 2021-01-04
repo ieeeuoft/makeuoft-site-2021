@@ -154,16 +154,14 @@ class ApplicationViewTestCase(SetupUserMixin, TestCase):
         self.view = reverse("registration:application")
 
         self.data = {
-            "birthday": date(2020, 9, 8),
-            "gender": "male",
-            "ethnicity": "caucasian",
-            "phone_number": "2262208655",
+            "birthday": date(2000, 9, 8),
+            "gender": "no-answer",
+            "ethnicity": "no-answer",
             "school": "UofT",
-            "study_level": "other",
+            "study_level": "undergraduate",
             "graduation_year": 2020,
-            "q1": "hi",
-            "q2": "there",
-            "q3": "foo",
+            "resume_sharing": False,
+            "eligibility_agree": True,
             "conduct_agree": True,
             "data_agree": True,
             "resume": "uploads/resumes/my_resume.pdf",
@@ -230,61 +228,3 @@ class MiscRegistrationViewsTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Test that the default from email was passed in as a context variable
         self.assertContains(response, settings.DEFAULT_FROM_EMAIL)
-
-
-class LeaveTeamViewTestCase(SetupUserMixin, TestCase):
-    def setUp(self):
-        super().setUp()
-
-        self.view = reverse("registration:leave-team")
-
-    def test_requires_login(self):
-        response = self.client.get(self.view)
-        self.assertRedirects(response, f"{reverse('event:login')}?next={self.view}")
-
-    def test_bad_response_for_no_application(self):
-        self._login()
-        response = self.client.get(self.view)
-        self.assertContains(
-            response,
-            "You have not submitted an application.",
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
-
-    def test_leaves_and_deletes_empty_team(self):
-        self._login()
-        self._apply()
-        initial_team_id = self.user.application.team.id
-
-        response = self.client.get(self.view)
-        self.assertRedirects(response, reverse("event:dashboard"))
-        self.user.application.refresh_from_db()
-        self.assertNotEqual(self.user.application.team.id, initial_team_id)
-        self.assertEqual(Team.objects.count(), 1)
-
-    def test_leaves_and_does_not_delete_nonempty_team(self):
-        self._login()
-        application = self._apply()
-        new_user = User.objects.create_user(
-            username="bob@ross.com", password="hithere987"
-        )
-        self._apply_as_user(new_user, team=application.team)
-
-        initial_team_id = self.user.application.team.id
-
-        response = self.client.get(self.view)
-        self.assertRedirects(response, reverse("event:dashboard"))
-        self.user.application.refresh_from_db()
-        self.assertNotEqual(self.user.application.team.id, initial_team_id)
-        self.assertEqual(Team.objects.count(), 2)
-
-    @patch("registration.views.is_registration_open")
-    def test_registration_has_closed(self, mock_is_registration_open):
-        mock_is_registration_open.return_value = False
-        self._login()
-        response = self.client.get(self.view)
-        self.assertContains(
-            response,
-            "You cannot change teams after registration has closed.",
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
