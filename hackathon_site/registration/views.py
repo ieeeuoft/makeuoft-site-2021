@@ -18,7 +18,6 @@ from django_registration.backends.activation.views import (
 
 from hackathon_site.utils import is_registration_open
 from registration.forms import SignUpForm, ApplicationForm
-from registration.models import Team as RegistrationTeam
 from event.models import Team as EventTeam, Profile
 
 
@@ -134,45 +133,6 @@ class ApplicationView(LoginRequiredMixin, CreateView):
             return redirect(reverse_lazy("event:dashboard"))
 
         return super().dispatch(request, *args, **kwargs)
-
-
-class LeaveTeamView(LoginRequiredMixin, View):
-    """
-    Visiting this page will remove a user from their team for
-    registration
-    """
-
-    def leave_team(self, request):
-        if not is_registration_open():
-            return HttpResponseBadRequest(
-                "You cannot change teams after registration has closed.".encode(
-                    encoding="utf-8"
-                )
-            )
-
-        if not hasattr(request.user, "application"):
-            return HttpResponseBadRequest(
-                "You have not submitted an application.".encode(encoding="utf-8")
-            )
-
-        application = self.request.user.application
-        team = application.team
-
-        # Leaving a team automatically puts them on a new team
-        application.team = RegistrationTeam.objects.create()
-        application.save()
-
-        # Delete the team if it is empty
-        if not team.applications.exists():
-            team.delete()
-
-        return redirect(reverse_lazy("event:dashboard"))
-
-    def get(self, request, *args, **kwargs):
-        return self.leave_team(request)
-
-    def post(self, request, *args, **kwargs):
-        return self.leave_team(request)
 
 
 class ResumeView(LoginRequiredMixin, PermissionRequiredMixin, View):
