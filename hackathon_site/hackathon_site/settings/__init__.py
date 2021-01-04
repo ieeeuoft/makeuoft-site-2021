@@ -44,9 +44,10 @@ if DEBUG:
     DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
     # NOTE: If you aren't ieee uoft, put your websites here
-    ALLOWED_HOSTS = ["ieee.utoronto.ca"]
+    ALLOWED_HOSTS = ["ieee.utoronto.ca", ".makeuoft.ca"]
     CORS_ORIGIN_REGEX_WHITELIST = [
-        r"^https://ieee\.utoronto.ca:?\d*$",
+        r"^https://ieee\.utoronto\.ca:?\d*$",
+        r"^https://(?:.+\.)?makeuoft\.ca:?\d*$",
     ]
 
     EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
