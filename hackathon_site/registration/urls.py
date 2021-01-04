@@ -23,6 +23,4 @@ urlpatterns = [
         name="activate",
     ),
     path("application/", views.ApplicationView.as_view(), name="application"),
-    path("leave_team/", views.LeaveTeamView.as_view(), name="leave-team"),
-    re_path("rsvp/(?P<rsvp>yes|no)/$", views.RSVPView.as_view(), name="rsvp"),
 ]

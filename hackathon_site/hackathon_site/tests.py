@@ -31,19 +31,16 @@ class SetupUserMixin:
             team = RegistrationTeam.objects.create()
 
         application_data = {
-            "birthday": date(2000, 1, 1),
+            "birthday": date(2000, 9, 8),
             "gender": "no-answer",
             "ethnicity": "no-answer",
-            "phone_number": "1234567890",
             "school": "UofT",
-            "study_level": "other",
+            "study_level": "undergraduate",
             "graduation_year": 2020,
-            "q1": "hi",
-            "q2": "there",
-            "q3": "foo",
+            "resume_sharing": False,
+            "eligibility_agree": True,
             "conduct_agree": True,
             "data_agree": True,
-            "resume": "uploads/resumes/my_resume.pdf",
         }
         return Application.objects.create(user=user, team=team, **application_data)
 
@@ -133,7 +130,7 @@ class SetupUserMixin:
         return team
 
     def _review(
-        self, application=None, reviewer=None, **kwargs,
+        self, application=None, reviewer=None, save=True, **kwargs,
     ):
         if application is None:
             application = self.user.application
@@ -163,7 +160,12 @@ class SetupUserMixin:
         }
         default_kwargs.update(kwargs)
 
-        self.review = Review.objects.create(**default_kwargs)
+        review = Review(**default_kwargs)
+        if save:
+            review.save()
+            self.review = review
+
+        return review
 
 
 @override_settings(IN_TESTING=False)

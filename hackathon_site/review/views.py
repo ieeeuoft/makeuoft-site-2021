@@ -4,10 +4,10 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import UserPassesTestMixin
-
 from django.template.loader import render_to_string
 from django.core import mail
 
+from registration.models import Application
 from review.forms import MailerForm
 from review.models import Review
 from hackathon_site import settings
@@ -46,7 +46,7 @@ class MailerView(UserPassesTestMixin, FormView):
             updated_at__gte=date_start,
             updated_at__lte=date_end,
             decision_sent_date__isnull=True,
-        )[:quantity]
+        ).order_by("id")[:quantity]
 
         # Get a mail socket connection and manually open it
         connection = mail.get_connection(fail_silently=False)
@@ -56,14 +56,24 @@ class MailerView(UserPassesTestMixin, FormView):
             for review in queryset:
                 current_date = datetime.now().date()
 
+                # The first 200 people to apply are eligible for reimbursement,
+                # as long as they were accepted and submit a project
+                application_position = (
+                    Application.objects.filter(
+                        created_at__lt=review.application.created_at
+                    ).count()
+                    + 1
+                )
+                reimbursement_eligible = (
+                    review.status == "Accepted" and application_position <= 200
+                )
+
                 # Create context data for rendering the template. Note that this assumes that both the message
                 # and html_message have identical context data
                 render_to_string_context = {
                     "user": review.application.user,
                     "request": self.request,
-                    "rsvp_deadline": (
-                        current_date + timedelta(days=settings.RSVP_DAYS)
-                    ).strftime("%b %d %Y"),
+                    "reimbursement_eligible": reimbursement_eligible,
                 }
 
                 review.application.user.email_user(
@@ -82,6 +92,9 @@ class MailerView(UserPassesTestMixin, FormView):
                     connection=connection,
                 )
 
+                # RSVP isn't being used for this hackathon
+                review.application.rsvp = True
+                review.application.save()
                 review.decision_sent_date = current_date
                 review.save()
         except Exception as e:
