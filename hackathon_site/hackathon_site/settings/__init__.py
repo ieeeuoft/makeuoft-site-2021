@@ -283,4 +283,4 @@ PARTICIPANT_PACKAGE_LINK = "https://docs.google.com/document/d/1P-Q1xqVl-C2c2OMa
 
 # Note this is in the form (chat_room_name, chat_room_link)
 # Chat room name is such as the following: Slack, Discord
-CHAT_ROOM = ("Discord", "https://discord.gg/aNpzGzvrTS")
+CHAT_ROOM = ("Discord", "https://discord.gg/8QkaH3xDJD")
