@@ -31,7 +31,7 @@ class ExportCsvMixin:
     export_fields = []
 
     def export_as_csv(self, request, queryset):
-        # Setup export_field_names and export_field attributes arrays
+        # Setup export_field_names and export_field_attributes arrays
         export_field_names, export_field_attributes = list(zip(*self.export_fields))
 
         response = HttpResponse(content_type="text/csv")
