@@ -3,6 +3,7 @@ import functools
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 from registration.models import Application, Team as TeamApplied
 
@@ -31,12 +32,7 @@ class ExportCsvMixin:
 
     def export_as_csv(self, request, queryset):
         # Setup export_field_names and export_field attributes arrays
-        export_field_names = []
-        export_field_attributes = []
-        if self.export_fields:
-            for item in self.export_fields:
-                export_field_names.append(item[0])
-                export_field_attributes.append(item[1])
+        export_field_names, export_field_attributes = list(zip(*self.export_fields))
 
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename={}.csv".format(
@@ -50,10 +46,10 @@ class ExportCsvMixin:
             for field in export_field_attributes:
                 try:
                     attributes.append(rgetattr(obj, field))
-                except Application.review.RelatedObjectDoesNotExist:
-                    attributes.append("None")
+                except ObjectDoesNotExist:
+                    attributes.append(None)
 
-            row = writer.writerow(attributes)
+            writer.writerow(attributes)
 
         return response
 
