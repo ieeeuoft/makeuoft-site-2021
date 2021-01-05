@@ -27,21 +27,32 @@ class ApplicationInline(admin.TabularInline):
 
 
 class ExportCsvMixin:
-    export_field_names = []
-    export_field_attributes = []
+    export_fields = []
 
     def export_as_csv(self, request, queryset):
+        # Setup export_field_names and export_field attributes arrays
+        export_field_names = []
+        export_field_attributes = []
+        if self.export_fields:
+            for item in self.export_fields:
+                export_field_names.append(item[0])
+                export_field_attributes.append(item[1])
+
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename={}.csv".format(
             self.model._meta
         )
         writer = csv.writer(response)
 
-        writer.writerow(self.export_field_names)
+        writer.writerow(export_field_names)
         for obj in queryset:
-            attributes = [
-                rgetattr(obj, field) for field in self.export_field_attributes
-            ]
+            attributes = []
+            for field in export_field_attributes:
+                try:
+                    attributes.append(rgetattr(obj, field))
+                except Application.review.RelatedObjectDoesNotExist:
+                    attributes.append("None")
+
             row = writer.writerow(attributes)
 
         return response
@@ -77,39 +88,22 @@ class ApplicationAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_filter = ("school",)
     actions = ["export_as_csv"]
 
-    export_field_names = [
-        "First Name",
-        "Last Name",
-        "Email",
-        "Team Code",
-        "Birthday",
-        "Gender",
-        "Ethnicity",
-        "School",
-        "Study Level",
-        "Graduation Year",
-        "Resume Sharing",
-        "Review Status",
-        "RSVP",
-        "Created At",
-        "Updated At",
-    ]
-    export_field_attributes = [
-        "user.first_name",
-        "user.last_name",
-        "user",
-        "team",
-        "birthday",
-        "gender",
-        "ethnicity",
-        "school",
-        "study_level",
-        "graduation_year",
-        "resume_sharing",
-        "review.status",
-        "rsvp",
-        "created_at",
-        "updated_at",
+    export_fields = [
+        ("First Name", "user.first_name"),
+        ("Last Name", "user.last_name"),
+        ("Email", "user"),
+        ("Team Code", "team"),
+        ("Birthday", "birthday"),
+        ("Gender", "gender"),
+        ("Ethnicity", "ethnicity"),
+        ("School", "school"),
+        ("Study Level", "study_level"),
+        ("Graduation Year", "graduation_year"),
+        ("Resume Sharing", "resume_sharing"),
+        ("Review Status", "review.status"),
+        ("RSVP", "rsvp"),
+        ("Created At", "created_at"),
+        ("Updated At", "updated_at"),
     ]
 
     def get_full_name(self, obj):
