@@ -202,7 +202,7 @@ class TeamReviewAdmin(admin.ModelAdmin):
                 "applications", "applications__review", "applications__user"
             )
             .annotate(members_count=Count("applications", distinct=True))
-            .annotate(most_recent_submission=Max("applications__updated_at"))
+            .annotate(most_recent_submission=Max("applications__created_at"))
         )
 
     def get_members_count(self, obj):

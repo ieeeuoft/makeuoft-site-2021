@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from django.urls import reverse_lazy
@@ -97,6 +98,9 @@ class MailerView(UserPassesTestMixin, FormView):
                 review.application.save()
                 review.decision_sent_date = current_date
                 review.save()
+
+                # This is due to emails being sent with Amazon SES. They have a limit of 5 emails / sec with our tier.
+                time.sleep(0.2)
         except Exception as e:
             logger.error(e)
             raise e
