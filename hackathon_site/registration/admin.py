@@ -87,7 +87,7 @@ class ApplicationAdmin(admin.ModelAdmin, ExportCsvMixin):
     export_fields = [
         ("First Name", "user.first_name"),
         ("Last Name", "user.last_name"),
-        ("Email", "user"),
+        ("Email", "user.email"),
         ("Team Code", "team"),
         ("Birthday", "birthday"),
         ("Gender", "gender"),
