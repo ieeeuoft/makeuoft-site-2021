@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from django.urls import reverse_lazy
@@ -97,6 +98,8 @@ class MailerView(UserPassesTestMixin, FormView):
                 review.application.save()
                 review.decision_sent_date = current_date
                 review.save()
+
+                time.sleep(0.2)
         except Exception as e:
             logger.error(e)
             raise e
