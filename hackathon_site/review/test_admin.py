@@ -98,14 +98,14 @@ class TeamReviewListAdminTestCase(SetupUserMixin, TestCase):
         The submission date for a team is the date of the most recently submitted
         application on that team.
         """
-        # Mock the function django uses to set application.updated_at
+        # Mock the function django uses to set application.created_at
         old_updated_date = datetime(2020, 1, 1, 10, 0, 0, tzinfo=settings.TZ_INFO)
         with patch(
             "django.utils.timezone.now", MagicMock(return_value=old_updated_date)
         ):
             team = self._make_full_registration_team()
 
-        # Make a new team member, this time with application updated_at time set to something newer
+        # Make a new team member, this time with application created_at time set to something newer
         self.user4.delete()
         self.user4 = User.objects.create_user(
             username="lawren@harris", password="wxyz7890"
