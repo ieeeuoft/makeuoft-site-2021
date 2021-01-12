@@ -14,8 +14,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <!-- I'll uncomment once Marketing gets me the new graphic -->
-    <!-- <li><a href="#sponsors">Sponsors</a></li> -->
+    <li><a href="#sponsors">Sponsors</a></li>
     <li><a href="#contact">Contact</a></li>
     {% if request.user.is_authenticated %}
         <li><a href="{{ url("event:dashboard") }}">Dashboard</a></li>                     
@@ -328,16 +327,14 @@
         <a class="carousel-item" ><img src="https://i.imgur.com/Ig49uvq.jpg" alt="2020-image-15"/></a>å
     </div>
 </div>
+<br /><br />
 
-<!-- I'll uncomment once Marketing gets me the new graphic -->
-<!-- <br /><br /> -->
-<!-- <div class="container">
+<div class="container">
     <div class="section scrollspy" id="sponsors">
         <div class="row">
             <h3 class="center">Sponsors</h3>
             <div class="row sponsorImgs">
                 <img src="{{ static('event/images/sponsors.svg') }}" alt="One big sponsor image"/>
-                <br />
             </div>
             <p class="center">
                 If you would like to sponsor us, feel free to reach out:
@@ -345,7 +342,7 @@
             </p>
         </div>
     </div>
-</div> -->
+</div>
 
 <footer class="page-footer secondaryColor fontText">
     <div class="container scrollspy" id="contact">
