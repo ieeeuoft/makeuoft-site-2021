@@ -381,17 +381,23 @@ class MailerTestCase(SetupUserMixin, TestCase):
         # First 50 should have the reimbursement message
         for i in range(50):
             self.assertIn(
-                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+                "you will be eligible for a $25 CAD reimbursement",
+                mail.outbox[i].body,
+                i,
             )
 
         # Next 100 (applications 101-200) should have the reimbursement message
         for i in range(50, 150):
             self.assertIn(
-                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+                "you will be eligible for a $25 CAD reimbursement",
+                mail.outbox[i].body,
+                i,
             )
 
         # Next 4 (applications 201-204) should not have the message
         for i in range(150, 154):
             self.assertNotIn(
-                "you will be eligible for a $25 reimbursement", mail.outbox[i].body, i
+                "you will be eligible for a $25 CAD reimbursement",
+                mail.outbox[i].body,
+                i,
             )
