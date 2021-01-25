@@ -377,6 +377,10 @@ class MailerTestCase(SetupUserMixin, TestCase):
             f"{application.user.email}"
         )
         self.assertIn(expected_message, mail.outbox[0].body)
+        self.assertIn(
+            f'<a href="mailto:{settings.CONTACT_EMAIL}">{settings.CONTACT_EMAIL}</a>',
+            mail.outbox[0].body,
+        )
 
         # First 50 should have the reimbursement message
         for i in range(50):
