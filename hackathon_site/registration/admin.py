@@ -100,6 +100,7 @@ class ApplicationAdmin(admin.ModelAdmin, ExportCsvMixin):
         ("RSVP", "rsvp"),
         ("Created At", "created_at"),
         ("Updated At", "updated_at"),
+        ("Resume", "resume"),
     ]
 
     def get_full_name(self, obj):
