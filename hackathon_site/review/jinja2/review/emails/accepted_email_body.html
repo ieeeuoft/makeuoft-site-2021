@@ -5,8 +5,9 @@
 <p>The {{ hackathon_name }} team has reviewed your application, and we’re excited to welcome you to {{ hackathon_name }}!</p>
 
 {% if reimbursement_eligible %}
-<p>Because you were one of the first 200 people to apply, as long as you submit your project you will be eligible for a $25 reimbursement at the end of the event. Once your project has been submitted, you will receive an e-transfer from us to this email address, {{ user.email }}. If you submit with teammates, and any of them also received this message, you will each be separately eligible for the reimbursement.</p>
+<p>Because you were one of the first 200 people to apply, as long as you submit your project you will be eligible for a $25 CAD reimbursement at the end of the event. Once your project has been submitted, you will receive an e-transfer from us to this email address, {{ user.email }}. If you submit with teammates, and any of them also received this message, you will each be separately eligible for the reimbursement.</p>
 
+<p><b>If you don't have a Canadian bank account</b>, please email us at <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> so we can arrange an alternative transfer method.</p>
 {% endif %}
 <p>Read our <a href="{{ participant_package_link }}">participant package</a> for all the info regarding the event, and join our <a href="{{ chat_room_link }}">{{ chat_room_name }}</a>. Stay tuned for more updates regarding detailed event logistics, and we hope to see you soon! If you have questions, read the FAQ on your <a href="{{ dashboard_url }}">dashboard</a> or feel free to contact us.</p>
 
